@@ -3,7 +3,7 @@ from matplotlib import rcParams
 import serial
 import time 
 if __name__ == "__main__":
-    arduinoData = serial.Serial('COM4', 1024)
+    arduinoData = serial.Serial('COM4', 1200)
     print("connected to: ", arduinoData.portstr)    
     
     #plt.ion()

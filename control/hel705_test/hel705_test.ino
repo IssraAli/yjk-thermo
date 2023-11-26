@@ -4,6 +4,7 @@
 
 const int topPin = A0;
 const int bottomPin = A1;
+const int vccc = A2;
 
 // setting instrument parameters
 const double r0 = 1000;
@@ -24,20 +25,22 @@ double wheatstone(double r1, double r2, double vo, double vcc){
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(1024);
+  Serial.begin(1200);
   Serial.print("\nstart\n");
+  analogReference(EXTERNAL); // running with vcc coming out of a current divider at 4.26V
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   int val = analogRead(topPin) - analogRead(bottomPin);
-  double V_out = (val/1024.0) * 5;
+  //double vcc = analogRead(vccc);
+  double V_out = (val/1024.0) * 4.21; //running with vcc coming out of a current divider at 4.26V
   double R_T = wheatstone(4.7e3, 1e3, V_out, 5.0);
   double temp = resistance_to_temp(R_T, r0, A);
   unsigned long current = millis() - start_time;
 
   //Serial.print("V_out: ");
-  Serial.print(V_out);
+  Serial.print(V_out, 3);
   Serial.print("\t");
   Serial.print(R_T);
   Serial.print("\t");
