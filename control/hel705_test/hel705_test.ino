@@ -1,4 +1,6 @@
 #include <math.h>
+#include <stdio.h>
+#include <time.h>
 
 const int topPin = A0;
 const int bottomPin = A1;
@@ -6,6 +8,7 @@ const int bottomPin = A1;
 // setting instrument parameters
 const double r0 = 1000;
 const double A = 3.8101E-3;//= alpha + (alpha * delta)/100;
+unsigned long start_time = millis();
 
 
 double resistance_to_temp(double r, double r0, double A){
@@ -21,7 +24,8 @@ double wheatstone(double r1, double r2, double vo, double vcc){
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(1024);
+  Serial.print("\nstart\n");
 }
 
 void loop() {
@@ -30,14 +34,18 @@ void loop() {
   double V_out = (val/1024.0) * 5;
   double R_T = wheatstone(4.7e3, 1e3, V_out, 5.0);
   double temp = resistance_to_temp(R_T, r0, A);
+  unsigned long current = millis() - start_time;
 
-  Serial.print("V_out: ");
+  //Serial.print("V_out: ");
   Serial.print(V_out);
-  Serial.print(", R_T: ");
+  Serial.print("\t");
   Serial.print(R_T);
-  Serial.print(", temp: ");
+  Serial.print("\t");
   Serial.print(temp);
+  Serial.print("\t");
+  Serial.print(current);
   Serial.print("\n");
+  
 
   // Serial.plot("V_out: ");
   // Serial.plot(V_out);
